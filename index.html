@@ -1,0 +1,51 @@
+<div id="app">
+    <div id="tab-stat" class="tab-content active">
+        <h2>STAT: S.P.E.C.I.A.L.</h2>
+        <div id="stats-container">
+            </div>
+    </div>
+
+    <div id="tab-data" class="tab-content">
+        <h2>DATA: QUESTS</h2>
+    </div>
+
+    <div id="tab-inv" class="tab-content">
+        <h2>INV: GEAR</h2>
+    </div>
+
+    <div id="tab-perks" class="tab-content">
+        <h2>PERKS</h2>
+    </div>
+
+    <div id="tab-arcade" class="tab-content">
+        <div id="arcade-menu">
+            <h2 class="slide-title">ARCADE: HOLOTAPES</h2>
+            <div class="game-card" onclick="launchGame('runner')">
+                <i class="fa-solid fa-person-running"></i> RUNNER: ПУСТОШЬ
+            </div>
+        </div>
+        <div id="game-container" style="display:none;">
+            <canvas id="gameCanvas"></canvas>
+            <button class="exit-btn" onclick="exitGame()">ВЫХОД</button>
+        </div>
+    </div>
+
+    <div id="tab-shop" class="tab-content locked">
+        <h2>SHOP</h2>
+        <p>ДОСТУПНО С УРОВНЯ 3</p>
+    </div>
+
+    <div id="tab-log" class="tab-content">
+        <h2>LOG</h2>
+    </div>
+
+    <nav class="bottom-nav">
+        <button onclick="switchTab('stat')">STAT</button>
+        <button onclick="switchTab('data')">DATA</button>
+        <button onclick="switchTab('inv')">INV</button>
+        <button onclick="switchTab('perks')">PERKS</button>
+        <button onclick="switchTab('arcade')">ARC</button>
+        <button onclick="switchTab('shop')">SHP</button>
+        <button onclick="switchTab('log')">LOG</button>
+    </nav>
+</div>
