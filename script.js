@@ -1,36 +1,25 @@
-// Переключение вкладок
-function switchTab(tabId) {
-    // 1. Убираем класс 'active' у всех вкладок
+// 1. Загрузка данных или установка значений по умолчанию
+let stats = JSON.parse(localStorage.getItem('myStats')) || { str: 3, per: 3, end: 3, cha: 3, int: 3, agi: 3, luc: 3 };
+let freePoints = parseInt(localStorage.getItem('myPoints'));
+if (isNaN(freePoints)) freePoints = 3;
+
+// 2. Переключение вкладок
+function switchTab(tabId, event) {
     document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-    
-    // 2. Добавляем класс 'active' только нужной вкладке
     const targetTab = document.getElementById('tab-' + tabId);
-    if (targetTab) {
-        targetTab.classList.add('active');
-    }
+    if (targetTab) targetTab.classList.add('active');
 
-    // 3. Подсветка кнопок
     document.querySelectorAll('.bottom-nav button').forEach(btn => btn.classList.remove('active'));
-    event.target.classList.add('active');
+    if (event) event.target.classList.add('active');
 }
 
-// Запуск игры
-function launchGame(gameName) {
-    document.getElementById('arcade-menu').style.display = 'none';
-    document.getElementById('game-container').style.display = 'block';
-    console.log("Запуск игры: " + gameName);
-}
-
-function exitGame() {
-    document.getElementById('arcade-menu').style.display = 'block';
-    document.getElementById('game-container').style.display = 'none';
-}
-let stats = { str: 3, per: 3, end: 3, cha: 3, int: 3, agi: 3, luc: 3 };
-let freePoints = 3;
-
+// 3. Отрисовка характеристик
 function renderStats() {
     const container = document.getElementById('stats-container');
-    document.getElementById('free-points').innerText = freePoints;
+    const pointsEl = document.getElementById('free-points');
+    if (pointsEl) pointsEl.innerText = freePoints;
+    if (!container) return;
+    
     container.innerHTML = '';
     
     for (let key in stats) {
@@ -39,7 +28,7 @@ function renderStats() {
         row.innerHTML = `
             <span style="width: 40px;">${key.toUpperCase()}</span>
             <div class="bars" id="${key}-bars"></div>
-            ${freePoints > 0 ? `<button onclick="addPoint('${key}')" style="margin-left:10px;">+</button>` : ''}
+            ${freePoints > 0 ? `<button onclick="addPoint('${key}')">+</button>` : ''}
         `;
         container.appendChild(row);
         
@@ -52,12 +41,26 @@ function renderStats() {
     }
 }
 
+// 4. Добавление очка
 function addPoint(stat) {
     if (freePoints > 0 && stats[stat] < 10) {
         stats[stat]++;
         freePoints--;
+        localStorage.setItem('myStats', JSON.stringify(stats));
+        localStorage.setItem('myPoints', freePoints);
         renderStats();
     }
+}
+
+// 5. Запуск игры
+function launchGame(gameName) {
+    document.getElementById('arcade-menu').style.display = 'none';
+    document.getElementById('game-container').style.display = 'block';
+}
+
+function exitGame() {
+    document.getElementById('arcade-menu').style.display = 'block';
+    document.getElementById('game-container').style.display = 'none';
 }
 
 document.addEventListener('DOMContentLoaded', renderStats);
