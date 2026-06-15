@@ -7,11 +7,14 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
 <div id="app">
     <div id="tab-stat" class="tab-content active">
         <h2>STAT: S.P.E.C.I.A.L.</h2>
-        <div id="stats-container">
-            </div>
+        <div id="points-display" style="color: #ffcc00; margin-bottom: 10px;">
+            ДОСТУПНЫХ ОЧКОВ: <span id="free-points">3</span>
+        </div>
+        <div id="stats-container"></div>
     </div>
 
     <div id="tab-data" class="tab-content">
@@ -58,5 +61,7 @@
         <button onclick="switchTab('log')">LOG</button>
     </nav>
 </div>
+
 <script src="script.js"></script>
 </body>
+</html>
