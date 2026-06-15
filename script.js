@@ -1,9 +1,22 @@
-// 1. Загрузка данных или установка значений по умолчанию
-let stats = JSON.parse(localStorage.getItem('myStats')) || { str: 3, per: 3, end: 3, cha: 3, int: 3, agi: 3, luc: 3 };
+// 1. Данные
+let stats = JSON.parse(localStorage.getItem('myStats')) || { 
+    "STRENGTH": 3, "PERCEPTION": 3, "ENDURANCE": 3, 
+    "CHARISMA": 3, "INTELLIGENCE": 3, "AGILITY": 3, "LUCK": 3 
+};
 let freePoints = parseInt(localStorage.getItem('myPoints'));
 if (isNaN(freePoints)) freePoints = 3;
 
-// 2. Переключение вкладок
+const descriptions = {
+    "STRENGTH": "Сила — чтобы таскать тонны хлама и выбивать двери, которые не поддались с первого раза.",
+    "PERCEPTION": "Восприятие — помогает не наступить в коровью мину и заметить крышку в куче мусора.",
+    "ENDURANCE": "Выносливость — позволяет долго бегать, много есть и не откинуть копыта после первого же укуса мухи.",
+    "CHARISMA": "Харизма — искусство убеждать других, что твой бред — это гениальный план спасения мира.",
+    "INTELLIGENCE": "Интеллект — чтобы не покупать мусор по цене золота и понимать, куда нажимать на терминале.",
+    "AGILITY": "Ловкость — чтобы уворачиваться от пуль, ударов и реальности, которая пытается тебя прихлопнуть.",
+    "LUCK": "Удача — единственное, что спасет, когда всё остальное окончательно пошло не по плану."
+};
+
+// 2. Логика переключения вкладок
 function switchTab(tabId, event) {
     document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
     const targetTab = document.getElementById('tab-' + tabId);
@@ -13,7 +26,14 @@ function switchTab(tabId, event) {
     if (event) event.target.classList.add('active');
 }
 
-// 3. Отрисовка характеристик
+// 3. Модальное окно
+function showInfo(statName) {
+    const modal = document.getElementById('info-modal');
+    document.getElementById('info-text').innerText = descriptions[statName];
+    modal.style.display = 'block';
+}
+
+// 4. Отрисовка статов
 function renderStats() {
     const container = document.getElementById('stats-container');
     const pointsEl = document.getElementById('free-points');
@@ -26,7 +46,8 @@ function renderStats() {
         let row = document.createElement('div');
         row.className = 'stat-row';
         row.innerHTML = `
-            <span style="width: 40px;">${key.toUpperCase()}</span>
+            <span style="width: 140px; cursor: pointer; color: #00ff00; text-decoration: underline;" 
+                  onclick="showInfo('${key}')">${key}</span>
             <div class="bars" id="${key}-bars"></div>
             ${freePoints > 0 ? `<button onclick="addPoint('${key}')">+</button>` : ''}
         `;
@@ -41,7 +62,7 @@ function renderStats() {
     }
 }
 
-// 4. Добавление очка
+// 5. Добавление очка
 function addPoint(stat) {
     if (freePoints > 0 && stats[stat] < 10) {
         stats[stat]++;
@@ -52,7 +73,7 @@ function addPoint(stat) {
     }
 }
 
-// 5. Запуск игры
+// 6. Игры
 function launchGame(gameName) {
     document.getElementById('arcade-menu').style.display = 'none';
     document.getElementById('game-container').style.display = 'block';
