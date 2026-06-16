@@ -1,12 +1,7 @@
-// 1. Данные
+// 1. Данные: Ключи ОБЯЗАНЫ совпадать с ключами в descriptions
 let stats = JSON.parse(localStorage.getItem('myStats')) || { 
-    "STRENGTH": 3, 
-    "PERCEPTION": 3, 
-    "ENDURANCE": 3, 
-    "CHARISMA": 3, 
-    "INTELLIGENCE": 3, 
-    "AGILITY": 3, 
-    "LUCK": 3 
+    "STRENGTH": 3, "PERCEPTION": 3, "ENDURANCE": 3, 
+    "CHARISMA": 3, "INTELLIGENCE": 3, "AGILITY": 3, "LUCK": 3 
 };
 let freePoints = parseInt(localStorage.getItem('myPoints'));
 if (isNaN(freePoints)) freePoints = 3;
@@ -21,14 +16,14 @@ const descriptions = {
     "LUCK": "Удача — единственное, что спасет, когда всё остальное окончательно пошло не по плану."
 };
 
-// 2. Логика переключения вкладок
+// 2. Переключение вкладок (добавили параметр event)
 function switchTab(tabId, event) {
     document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
     const targetTab = document.getElementById('tab-' + tabId);
     if (targetTab) targetTab.classList.add('active');
 
     document.querySelectorAll('.bottom-nav button').forEach(btn => btn.classList.remove('active'));
-    if (event) event.target.classList.add('active');
+    if (event) event.currentTarget.classList.add('active');
 }
 
 // 3. Модальное окно
@@ -38,7 +33,7 @@ function showInfo(statName) {
     modal.style.display = 'block';
 }
 
-// 4. Отрисовка статов
+// 4. Отрисовка
 function renderStats() {
     const container = document.getElementById('stats-container');
     const pointsEl = document.getElementById('free-points');
@@ -67,7 +62,6 @@ function renderStats() {
     }
 }
 
-// 5. Добавление очка
 function addPoint(stat) {
     if (freePoints > 0 && stats[stat] < 10) {
         stats[stat]++;
@@ -78,7 +72,6 @@ function addPoint(stat) {
     }
 }
 
-// 6. Игры
 function launchGame(gameName) {
     document.getElementById('arcade-menu').style.display = 'none';
     document.getElementById('game-container').style.display = 'block';
