@@ -15,6 +15,15 @@ const descriptions = {
     "AGILITY": "Ловкость — чтобы уворачиваться от пуль, ударов и реальности, которая пытается тебя прихлопнуть.",
     "LUCK": "Удача — единственное, что спасет, когда всё остальное окончательно пошло не по плану."
 };
+const animations = {
+    "STRENGTH": "🚶‍♂️📦",
+    "PERCEPTION": "🧐💩🪰", // Исследователь мусорных куч
+    "ENDURANCE": "🏃‍♂️💨🪰",  // Убегающий от роя
+    "CHARISMA": "🕺🎤💀",   // Спикер перед рейдерами
+    "INTELLIGENCE": "🧠💰",  // Гений продаж
+    "AGILITY": "🤸‍♂️🕶️",    // Уклонение в стиле матрицы
+    "LUCK": "🎲🎲⁶⁶"       // Кубики, где всегда 6
+};
 
 // 2. Переключение вкладок (добавили параметр event)
 function switchTab(tabId, event) {
@@ -30,6 +39,15 @@ function switchTab(tabId, event) {
 function showInfo(statName) {
     const modal = document.getElementById('info-modal');
     document.getElementById('info-text').innerText = descriptions[statName];
+    
+    // Меняем персонажа/сцену в блоке анимации
+    const walker = document.getElementById('walker');
+    walker.innerText = animations[statName] || "🚶‍♂️";
+    
+    // Добавляем эффект тряски, если это ЛОВКОСТЬ или ВЫНОСЛИВОСТЬ
+    walker.style.animation = (statName === 'AGILITY' || statName === 'ENDURANCE') ? "shake 0.5s infinite" : "heavy-walk 2s infinite linear";
+    
+    modal.style.display = 'block';
     
     // Эффект «моргания» экрана при открытии
     document.body.style.filter = "brightness(1.5)";
