@@ -1,75 +1,69 @@
-// 1. Данные: Ключи ОБЯЗАНЫ совпадать с ключами в descriptions
+// Данные
 let stats = JSON.parse(localStorage.getItem('myStats')) || { 
     "STRENGTH": 3, "PERCEPTION": 3, "ENDURANCE": 3, 
     "CHARISMA": 3, "INTELLIGENCE": 3, "AGILITY": 3, "LUCK": 3 
 };
-let freePoints = parseInt(localStorage.getItem('myPoints'));
-if (isNaN(freePoints)) freePoints = 3;
+let freePoints = parseInt(localStorage.getItem('myPoints')) || 3;
 
 const descriptions = {
-    "STRENGTH": "Сила — чтобы таскать тонны хлама и выбивать двери, которые не поддались с первого раза.",
-    "PERCEPTION": "Восприятие — помогает не наступить в коровью мину и заметить крышку в куче мусора.",
-    "ENDURANCE": "Выносливость — позволяет долго бегать, много есть и не откинуть копыта после первого же укуса мухи.",
-    "CHARISMA": "Харизма — искусство убеждать других, что твой бред — это гениальный план спасения мира.",
-    "INTELLIGENCE": "Интеллект — чтобы не покупать мусор по цене золота и понимать, куда нажимать на терминале.",
-    "AGILITY": "Ловкость — чтобы уворачиваться от пуль, ударов и реальности, которая пытается тебя прихлопнуть.",
-    "LUCK": "Удача — единственное, что спасет, когда всё остальное окончательно пошло не по плану."
-};
-const animations = {
-    "STRENGTH": "🚶‍♂️📦",
-    "PERCEPTION": "🧐💩🪰", // Исследователь мусорных куч
-    "ENDURANCE": "🏃‍♂️💨🪰",  // Убегающий от роя
-    "CHARISMA": "🕺🎤💀",   // Спикер перед рейдерами
-    "INTELLIGENCE": "🧠💰",  // Гений продаж
-    "AGILITY": "🤸‍♂️🕶️",    // Уклонение в стиле матрицы
-    "LUCK": "🎲🎲⁶⁶"       // Кубики, где всегда 6
+    "STRENGTH": "Сила — чтобы таскать тонны хлама и выбивать двери.",
+    "PERCEPTION": "Восприятие — помогает не наступить в мину.",
+    "ENDURANCE": "Выносливость — позволяет долго бегать.",
+    "CHARISMA": "Харизма — искусство убеждать.",
+    "INTELLIGENCE": "Интеллект — чтобы не покупать мусор.",
+    "AGILITY": "Ловкость — чтобы уворачиваться от пуль.",
+    "LUCK": "Удача — единственное, что спасет."
 };
 
-// 2. Переключение вкладок (добавили параметр event)
-function switchTab(tabId, event) {
-    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-    const targetTab = document.getElementById('tab-' + tabId);
-    if (targetTab) targetTab.classList.add('active');
+const avatarMap = {
+    "STRENGTH": "strength.png",
+    "PERCEPTION": "perception.png",
+    "ENDURANCE": "endurance.png",
+    "CHARISMA": "charisma.png",
+    "INTELLIGENCE": "intelligence.png",
+    "LUCK": "luck.png",
+    "AGILITY": "agility.png"
+};
 
-    document.querySelectorAll('.bottom-nav button').forEach(btn => btn.classList.remove('active'));
-    if (event) event.currentTarget.classList.add('active');
-}
-
-// 3. Модальное окно
+// ЕДИНАЯ ФУНКЦИЯ SHOWINFO
 function showInfo(statName) {
     const modal = document.getElementById('info-modal');
-    document.getElementById('info-text').innerText = descriptions[statName];
+    const infoText = document.getElementById('info-text');
+    const displayImg = document.getElementById('stat-display-img'); // Главный экран
+    const modalImg = document.getElementById('modal-stat-img');   // Внутри окна
     
-    // Меняем персонажа/сцену в блоке анимации
-    const walker = document.getElementById('walker');
-    walker.innerText = animations[statName] || "🚶‍♂️";
+    // 1. Текст
+    infoText.innerText = descriptions[statName];
     
-    // Добавляем эффект тряски, если это ЛОВКОСТЬ или ВЫНОСЛИВОСТЬ
-    walker.style.animation = (statName === 'AGILITY' || statName === 'ENDURANCE') ? "shake 0.5s infinite" : "heavy-walk 2s infinite linear";
+    // 2. Картинка (если файлы в папке "assets/avatars/")
+    const imgSrc = "assets/avatars/" + (avatarMap[statName] || "default.png");
+    if(displayImg) displayImg.src = imgSrc;
+    if(modalImg) modalImg.src = imgSrc;
     
-    modal.style.display = 'block';
-    
-    // Эффект «моргания» экрана при открытии
+    // 3. Эффект экрана
     document.body.style.filter = "brightness(1.5)";
     setTimeout(() => { document.body.style.filter = "brightness(1)"; }, 100);
     
     modal.style.display = 'block';
 }
 
-// 4. Отрисовка
+function switchTab(tabId, event) {
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    document.getElementById('tab-' + tabId).classList.add('active');
+    document.querySelectorAll('.bottom-nav button').forEach(btn => btn.classList.remove('active'));
+    if (event) event.currentTarget.classList.add('active');
+}
+
 function renderStats() {
     const container = document.getElementById('stats-container');
-    const pointsEl = document.getElementById('free-points');
-    if (pointsEl) pointsEl.innerText = freePoints;
-    if (!container) return;
-    
+    document.getElementById('free-points').innerText = freePoints;
     container.innerHTML = '';
     
     for (let key in stats) {
         let row = document.createElement('div');
         row.className = 'stat-row';
         row.innerHTML = `
-            <span style="width: 140px; cursor: pointer; color: #00ff00; text-decoration: underline;" 
+            <span style="cursor: pointer; color: #00ff00; text-decoration: underline;" 
                   onclick="showInfo('${key}')">${key}</span>
             <div class="bars" id="${key}-bars"></div>
             ${freePoints > 0 ? `<button onclick="addPoint('${key}')">+</button>` : ''}
@@ -87,22 +81,11 @@ function renderStats() {
 
 function addPoint(stat) {
     if (freePoints > 0 && stats[stat] < 10) {
-        stats[stat]++;
-        freePoints--;
+        stats[stat]++; freePoints--;
         localStorage.setItem('myStats', JSON.stringify(stats));
         localStorage.setItem('myPoints', freePoints);
         renderStats();
     }
-}
-
-function launchGame(gameName) {
-    document.getElementById('arcade-menu').style.display = 'none';
-    document.getElementById('game-container').style.display = 'block';
-}
-
-function exitGame() {
-    document.getElementById('arcade-menu').style.display = 'block';
-    document.getElementById('game-container').style.display = 'none';
 }
 
 document.addEventListener('DOMContentLoaded', renderStats);
