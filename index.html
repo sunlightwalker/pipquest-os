@@ -1,98 +1,54 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PipQuest OS</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-    <div style="display:none; position:fixed; top:20%; left:10%; width:80%; padding:20px; background:#001100; border:2px solid #00ff00; color:#00ff00; z-index:999; text-align:center;">
-    <p id="info-text"></p>
-    <button onclick="document.getElementById('info-modal').style.display='none'">ЗАКРЫТЬ</button>
-</div>
 <body>
-
 <div id="app">
-<div id="tab-stat" class="tab-content active">
-    <h2>STAT: S.P.E.C.I.A.L.</h2>
-    
-    <div id="points-display" style="color: #ffcc00; margin-bottom: 10px;">
-        ДОСТУПНЫХ ОЧКОВ: <span id="free-points">3</span>
-    </div>
-
-    <div id="vault-boy-container" style="text-align: center; margin-top: 30px;">
-        <img id="stat-display-img" src="default.png" 
-             style="width: 200px; image-rendering: pixelated; border: 1px solid #00ff00;">
-    </div>
-
-    <div id="stats-container"></div>
-
-    <div id="info-modal" style="display:none; position:fixed; top:20%; left:10%; width:80%; padding:20px; background:#001100; border:2px solid #00ff00; color:#00ff00; z-index:999; text-align:center;">
-        <p id="info-text"></p>
-        <img id="modal-stat-img" src="" style="width: 150px; display: block; margin: 10px auto; border: 1px solid #00ff00;">
-        <button onclick="document.getElementById('info-modal').style.display='none'">ЗАКРЫТЬ</button>
-    </div>
-</div>
-<!-- Модальное окно (оставляем одно, в конце body) -->
-<div id="info-modal" style="display:none; position:fixed; top:20%; left:10%; width:80%; padding:20px; background:#001100; border:2px solid #00ff00; color:#00ff00; z-index:999; text-align:center;">
-    <p id="info-text"></p>
-    <!-- Картинка внутри модалки, если хочешь, чтобы она появлялась при нажатии -->
-    <img id="modal-stat-img" src="" style="width: 150px; display: block; margin: 10px auto;">
-    <button onclick="document.getElementById('info-modal').style.display='none'">ЗАКРЫТЬ</button>
-</div>
-</div>
-        <div id="stats-container"></div>
-        <div id="info-modal" style="display:none; position:fixed; top:20%; left:10%; width:80%; padding:20px; background:#001100; border:2px solid #00ff00; color:#00ff00; z-index:100; text-align:center;">
-    <p id="info-text"></p>
-    <button onclick="document.getElementById('info-modal').style.display='none'">ЗАКРЫТЬ</button>
-    </div>
+    <div id="tab-stat" class="tab-content active">
+        <h2>STAT: S.P.E.C.I.A.L.</h2>
         
+        <div id="points-display" style="color: #ffcc00; margin-bottom: 10px;">
+            ДОСТУПНЫХ ОЧКОВ: <span id="free-points">3</span>
+        </div>
 
-    <div id="tab-data" class="tab-content">
-        <h2>DATA: QUESTS</h2>
+        <!-- Контейнер для главного аватара -->
+        <div id="vault-boy-container" style="text-align: center; margin-top: 30px;">
+            <img id="stat-display-img" src="assets/avatars/default.png" 
+                 style="width: 200px; image-rendering: pixelated; border: 1px solid #00ff00;">
+        </div>
+
+        <div id="stats-container"></div>
     </div>
 
-    <div id="tab-inv" class="tab-content">
-        <h2>INV: GEAR</h2>
-    </div>
-
-    <div id="tab-perks" class="tab-content">
-        <h2>PERKS</h2>
-    </div>
-
+    <!-- Остальные вкладки -->
+    <div id="tab-data" class="tab-content"><h2>DATA: QUESTS</h2></div>
+    <div id="tab-inv" class="tab-content"><h2>INV: GEAR</h2></div>
+    <div id="tab-perks" class="tab-content"><h2>PERKS</h2></div>
     <div id="tab-arcade" class="tab-content">
         <div id="arcade-menu">
             <h2 class="slide-title">ARCADE: HOLOTAPES</h2>
-            <div class="game-card" onclick="launchGame('runner')">
-                <i class="fa-solid fa-person-running"></i> RUNNER: ПУСТОШЬ
-            </div>
+            <div class="game-card" onclick="launchGame('runner')">RUNNER: ПУСТОШЬ</div>
         </div>
         <div id="game-container" style="display:none;">
             <canvas id="gameCanvas"></canvas>
             <button class="exit-btn" onclick="exitGame()">ВЫХОД</button>
         </div>
     </div>
+    <div id="tab-shop" class="tab-content locked"><h2>SHOP</h2></div>
+    <div id="tab-log" class="tab-content"><h2>LOG</h2></div>
 
-    <div id="tab-shop" class="tab-content locked">
-        <h2>SHOP</h2>
-        <p>ДОСТУПНО С УРОВНЯ 3</p>
+    <!-- ОДНО ЕДИНОЕ МОДАЛЬНОЕ ОКНО -->
+    <div id="info-modal" style="display:none; position:fixed; top:20%; left:10%; width:80%; padding:20px; background:#001100; border:2px solid #00ff00; color:#00ff00; z-index:999; text-align:center;">
+        <p id="info-text"></p>
+        <img id="modal-stat-img" src="" style="width: 150px; display: block; margin: 10px auto; border: 1px solid #00ff00;">
+        <button onclick="document.getElementById('info-modal').style.display='none'">ЗАКРЫТЬ</button>
     </div>
 
-    <div id="tab-log" class="tab-content">
-        <h2>LOG</h2>
-    </div>
-
-<nav class="bottom-nav">
-    <button onclick="switchTab('stat', event)" class="active">STAT</button>
-    <button onclick="switchTab('data', event)">DATA</button>
-    <button onclick="switchTab('inv', event)">INV</button>
-    <button onclick="switchTab('perks', event)">PERKS</button>
-    <button onclick="switchTab('arcade', event)">ARC</button>
-    <button onclick="switchTab('shop', event)">SHP</button>
-    <button onclick="switchTab('log', event)">LOG</button>
-</nav>
+    <nav class="bottom-nav">
+        <button onclick="switchTab('stat', event)" class="active">STAT</button>
+        <button onclick="switchTab('data', event)">DATA</button>
+        <button onclick="switchTab('inv', event)">INV</button>
+        <button onclick="switchTab('perks', event)">PERKS</button>
+        <button onclick="switchTab('arcade', event)">ARC</button>
+        <button onclick="switchTab('shop', event)">SHP</button>
+        <button onclick="switchTab('log', event)">LOG</button>
+    </nav>
 </div>
-
 <script src="script.js"></script>
 </body>
-</html>
