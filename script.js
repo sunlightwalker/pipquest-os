@@ -35,8 +35,8 @@ function showInfo(statName) {
     // 1. Текст
     infoText.innerText = descriptions[statName];
     
-    // 2. Картинка (если файлы в папке "assets/avatars/")
-    const imgSrc = "assets/avatars/" + (avatarMap[statName] || "default.png");
+    // Если создал папку "images"
+    const imgSrc = "images/" + (avatarMap[statName] || "strength.png");
     if(displayImg) displayImg.src = imgSrc;
     if(modalImg) modalImg.src = imgSrc;
     
