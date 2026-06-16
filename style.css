@@ -44,3 +44,10 @@ button:hover { background: #00ff00; color: #000; }
     50% { transform: translateX(20px); }
     100% { transform: translateX(-20px); }
 }
+/* Добавь это в свои стили, чтобы картинки были одинаковыми и аккуратными */
+img {
+    max-width: 100%;
+    height: auto;
+    image-rendering: pixelated; /* Сохраняет четкость пиксель-арта */
+    border: 1px solid #00ff00;
+}
