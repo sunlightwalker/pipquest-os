@@ -18,3 +18,13 @@ button {
     padding: 2px 8px;
 }
 button:hover { background: #00ff00; color: #000; }
+/* Анимация появления */
+@keyframes flicker {
+    0% { opacity: 0; transform: scale(0.9); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+#info-modal {
+    animation: flicker 0.3s ease-out; /* Плавное появление за 0.3 секунды */
+    box-shadow: 0 0 15px #00ff00;    /* Добавим свечение окну */
+}
