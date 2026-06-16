@@ -1,7 +1,12 @@
 // 1. Данные
 let stats = JSON.parse(localStorage.getItem('myStats')) || { 
-    "STRENGTH": 3, "PERCEPTION": 3, "ENDURANCE": 3, 
-    "CHARISMA": 3, "INTELLIGENCE": 3, "AGILITY": 3, "LUCK": 3 
+    "STRENGTH": 3, 
+    "PERCEPTION": 3, 
+    "ENDURANCE": 3, 
+    "CHARISMA": 3, 
+    "INTELLIGENCE": 3, 
+    "AGILITY": 3, 
+    "LUCK": 3 
 };
 let freePoints = parseInt(localStorage.getItem('myPoints'));
 if (isNaN(freePoints)) freePoints = 3;
