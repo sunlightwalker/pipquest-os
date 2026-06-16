@@ -1,54 +1,63 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>PipQuest OS</title>
+    <style>
+        /* СЮДА ВСТАВЬ СВОЙ CSS */
+        body { background: #000; color: #00ff00; font-family: monospace; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .stat-row { display: flex; align-items: center; margin: 10px 0; }
+        .block { width: 10px; height: 10px; border: 1px solid #00ff00; margin-right: 2px; }
+        .block.filled { background: #00ff00; }
+    </style>
+</head>
 <body>
+
 <div id="app">
     <div id="tab-stat" class="tab-content active">
         <h2>STAT: S.P.E.C.I.A.L.</h2>
-        
-        <div id="points-display" style="color: #ffcc00; margin-bottom: 10px;">
-            ДОСТУПНЫХ ОЧКОВ: <span id="free-points">3</span>
+        <div id="vault-boy-container" style="text-align: center;">
+            <img id="stat-display-img" src="strength.png" style="width: 200px; border: 1px solid #00ff00;">
         </div>
-
-        <!-- Контейнер для главного аватара -->
-        <div id="vault-boy-container" style="text-align: center; margin-top: 30px;">
-            <img id="stat-display-img" src="assets/avatars/default.png" 
-                 style="width: 200px; image-rendering: pixelated; border: 1px solid #00ff00;">
-        </div>
-
         <div id="stats-container"></div>
     </div>
-
-    <!-- Остальные вкладки -->
-    <div id="tab-data" class="tab-content"><h2>DATA: QUESTS</h2></div>
-    <div id="tab-inv" class="tab-content"><h2>INV: GEAR</h2></div>
-    <div id="tab-perks" class="tab-content"><h2>PERKS</h2></div>
-    <div id="tab-arcade" class="tab-content">
-        <div id="arcade-menu">
-            <h2 class="slide-title">ARCADE: HOLOTAPES</h2>
-            <div class="game-card" onclick="launchGame('runner')">RUNNER: ПУСТОШЬ</div>
-        </div>
-        <div id="game-container" style="display:none;">
-            <canvas id="gameCanvas"></canvas>
-            <button class="exit-btn" onclick="exitGame()">ВЫХОД</button>
-        </div>
-    </div>
-    <div id="tab-shop" class="tab-content locked"><h2>SHOP</h2></div>
-    <div id="tab-log" class="tab-content"><h2>LOG</h2></div>
-
-    <!-- ОДНО ЕДИНОЕ МОДАЛЬНОЕ ОКНО -->
-    <div id="info-modal" style="display:none; position:fixed; top:20%; left:10%; width:80%; padding:20px; background:#001100; border:2px solid #00ff00; color:#00ff00; z-index:999; text-align:center;">
+    
+    <div id="info-modal" style="display:none; position:fixed; top:20%; left:10%; width:80%; background:#001100; border:1px solid #00ff00; z-index:999; text-align:center;">
         <p id="info-text"></p>
-        <img id="modal-stat-img" src="" style="width: 150px; display: block; margin: 10px auto; border: 1px solid #00ff00;">
+        <img id="modal-stat-img" src="" style="width: 150px;">
         <button onclick="document.getElementById('info-modal').style.display='none'">ЗАКРЫТЬ</button>
     </div>
 
     <nav class="bottom-nav">
-        <button onclick="switchTab('stat', event)" class="active">STAT</button>
-        <button onclick="switchTab('data', event)">DATA</button>
-        <button onclick="switchTab('inv', event)">INV</button>
-        <button onclick="switchTab('perks', event)">PERKS</button>
-        <button onclick="switchTab('arcade', event)">ARC</button>
-        <button onclick="switchTab('shop', event)">SHP</button>
-        <button onclick="switchTab('log', event)">LOG</button>
-    </nav>
+        <button onclick="switchTab('stat', event)">STAT</button>
+        </nav>
 </div>
-<script src="script.js"></script>
+
+<script>
+    /* СЮДА ВСТАВЬ ВЕСЬ СВОЙ JS (код, который я давал выше) */
+    
+    let stats = JSON.parse(localStorage.getItem('myStats')) || { 
+        "STRENGTH": 3, "PERCEPTION": 3, "ENDURANCE": 3, 
+        "CHARISMA": 3, "INTELLIGENCE": 3, "AGILITY": 3, "LUCK": 3 
+    };
+    // ... остальной твой JS код ...
+
+    function showInfo(statName) {
+        const modal = document.getElementById('info-modal');
+        const displayImg = document.getElementById('stat-display-img');
+        const modalImg = document.getElementById('modal-stat-img');
+        const imgSrc = avatarMap[statName] || "strength.png";
+        
+        displayImg.src = imgSrc;
+        modalImg.src = imgSrc;
+        document.getElementById('info-text').innerText = descriptions[statName];
+        modal.style.display = 'block';
+    }
+    
+    // ... остальной JS ...
+</script>
+
 </body>
+</html>
