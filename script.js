@@ -30,6 +30,11 @@ function switchTab(tabId, event) {
 function showInfo(statName) {
     const modal = document.getElementById('info-modal');
     document.getElementById('info-text').innerText = descriptions[statName];
+    
+    // Эффект «моргания» экрана при открытии
+    document.body.style.filter = "brightness(1.5)";
+    setTimeout(() => { document.body.style.filter = "brightness(1)"; }, 100);
+    
     modal.style.display = 'block';
 }
 
