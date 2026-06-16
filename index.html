@@ -6,20 +6,40 @@
     <title>PipQuest OS</title>
     <link rel="stylesheet" href="style.css">
 </head>
-    <div id="info-modal" style="display:none; position:fixed; top:20%; left:10%; width:80%; padding:20px; background:#001100; border:2px solid #00ff00; color:#00ff00; z-index:999; text-align:center;">
+    <div style="display:none; position:fixed; top:20%; left:10%; width:80%; padding:20px; background:#001100; border:2px solid #00ff00; color:#00ff00; z-index:999; text-align:center;">
     <p id="info-text"></p>
     <button onclick="document.getElementById('info-modal').style.display='none'">ЗАКРЫТЬ</button>
 </div>
 <body>
 
 <div id="app">
-    <div id="tab-stat" class="tab-content active">
-        <h2>STAT: S.P.E.C.I.A.L.</h2>
-        <div id="points-display" style="color: #ffcc00; margin-bottom: 10px;">
-            ДОСТУПНЫХ ОЧКОВ: <span id="free-points">3</span>
-        </div>
-    <div id="vault-boy-container" style="text-align: center; margin-top: 30px; font-size: 50px;">
-    <div id="walker">🚶‍♂️</div>
+<div id="tab-stat" class="tab-content active">
+    <h2>STAT: S.P.E.C.I.A.L.</h2>
+    
+    <div id="points-display" style="color: #ffcc00; margin-bottom: 10px;">
+        ДОСТУПНЫХ ОЧКОВ: <span id="free-points">3</span>
+    </div>
+
+    <div id="vault-boy-container" style="text-align: center; margin-top: 30px;">
+        <img id="stat-display-img" src="default.png" 
+             style="width: 200px; image-rendering: pixelated; border: 1px solid #00ff00;">
+    </div>
+
+    <div id="stats-container"></div>
+
+    <div id="info-modal" style="display:none; position:fixed; top:20%; left:10%; width:80%; padding:20px; background:#001100; border:2px solid #00ff00; color:#00ff00; z-index:999; text-align:center;">
+        <p id="info-text"></p>
+        <img id="modal-stat-img" src="" style="width: 150px; display: block; margin: 10px auto; border: 1px solid #00ff00;">
+        <button onclick="document.getElementById('info-modal').style.display='none'">ЗАКРЫТЬ</button>
+    </div>
+</div>
+<!-- Модальное окно (оставляем одно, в конце body) -->
+<div id="info-modal" style="display:none; position:fixed; top:20%; left:10%; width:80%; padding:20px; background:#001100; border:2px solid #00ff00; color:#00ff00; z-index:999; text-align:center;">
+    <p id="info-text"></p>
+    <!-- Картинка внутри модалки, если хочешь, чтобы она появлялась при нажатии -->
+    <img id="modal-stat-img" src="" style="width: 150px; display: block; margin: 10px auto;">
+    <button onclick="document.getElementById('info-modal').style.display='none'">ЗАКРЫТЬ</button>
+</div>
 </div>
         <div id="stats-container"></div>
         <div id="info-modal" style="display:none; position:fixed; top:20%; left:10%; width:80%; padding:20px; background:#001100; border:2px solid #00ff00; color:#00ff00; z-index:100; text-align:center;">
