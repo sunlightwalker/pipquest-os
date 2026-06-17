@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <title>PipQuest OS</title>
     <style>
-        /* СЮДА ВСТАВЬ СВОЙ CSS */
         body { background: #000; color: #00ff00; font-family: monospace; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
-        .stat-row { display: flex; align-items: center; margin: 10px 0; }
-        .block { width: 10px; height: 10px; border: 1px solid #00ff00; margin-right: 2px; }
+        .stat-row { display: flex; align-items: center; margin: 15px 0; gap: 10px; }
+        .block { width: 12px; height: 12px; border: 1px solid #00ff00; }
         .block.filled { background: #00ff00; }
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; display: flex; justify-content: space-around; background: #001100; }
     </style>
 </head>
 <body>
@@ -18,46 +18,76 @@
 <div id="app">
     <div id="tab-stat" class="tab-content active">
         <h2>STAT: S.P.E.C.I.A.L.</h2>
-        <div id="vault-boy-container" style="text-align: center;">
-            <img id="stat-display-img" src="strength.png" style="width: 200px; border: 1px solid #00ff00;">
+        <div id="points-display">ДОСТУПНЫХ ОЧКОВ: <span id="free-points">3</span></div>
+        
+        <div id="vault-boy-container" style="text-align: center; margin: 20px;">
+            <img id="stat-display-img" src="images/strength.png" style="width: 200px; border: 1px solid #00ff00;">
         </div>
+        
         <div id="stats-container"></div>
     </div>
-    
-    <div id="info-modal" style="display:none; position:fixed; top:20%; left:10%; width:80%; background:#001100; border:1px solid #00ff00; z-index:999; text-align:center;">
+
+    <div id="info-modal" style="display:none; position:fixed; top:10%; left:5%; width:90%; padding:20px; background:#000; border:2px solid #00ff00; z-index:999; text-align:center;">
         <p id="info-text"></p>
-        <img id="modal-stat-img" src="" style="width: 150px;">
-        <button onclick="document.getElementById('info-modal').style.display='none'">ЗАКРЫТЬ</button>
+        <img id="modal-stat-img" src="" style="width: 150px; border: 1px solid #00ff00;">
+        <br><button onclick="document.getElementById('info-modal').style.display='none'">ЗАКРЫТЬ</button>
     </div>
 
     <nav class="bottom-nav">
         <button onclick="switchTab('stat', event)">STAT</button>
-        </nav>
+        <button onclick="switchTab('data', event)">DATA</button>
+    </nav>
 </div>
 
 <script>
-    /* СЮДА ВСТАВЬ ВЕСЬ СВОЙ JS (код, который я давал выше) */
-    
-    let stats = JSON.parse(localStorage.getItem('myStats')) || { 
-        "STRENGTH": 3, "PERCEPTION": 3, "ENDURANCE": 3, 
-        "CHARISMA": 3, "INTELLIGENCE": 3, "AGILITY": 3, "LUCK": 3 
+    const stats = { "STRENGTH": 3, "PERCEPTION": 3, "ENDURANCE": 3, "CHARISMA": 3, "INTELLIGENCE": 3, "AGILITY": 3, "LUCK": 3 };
+    let freePoints = 3;
+
+    const descriptions = {
+        "STRENGTH": "Сила — чтобы таскать тонны хлама.",
+        "PERCEPTION": "Восприятие — помогает не наступить в мину.",
+        "ENDURANCE": "Выносливость — позволяет долго бегать.",
+        "CHARISMA": "Харизма — искусство убеждать.",
+        "INTELLIGENCE": "Интеллект — чтобы не покупать мусор.",
+        "AGILITY": "Ловкость — чтобы уворачиваться от пуль.",
+        "LUCK": "Удача — единственное, что спасет."
     };
-    // ... остальной твой JS код ...
+
+    const avatarMap = {
+        "STRENGTH": "strength.png", "PERCEPTION": "perception.png", "ENDURANCE": "endurance.png",
+        "CHARISMA": "charisma.png", "INTELLIGENCE": "intelligence.png", "LUCK": "luck.png", "AGILITY": "agility.png"
+    };
 
     function showInfo(statName) {
-        const modal = document.getElementById('info-modal');
-        const displayImg = document.getElementById('stat-display-img');
-        const modalImg = document.getElementById('modal-stat-img');
-        const imgSrc = avatarMap[statName] || "strength.png";
-        
-        displayImg.src = imgSrc;
-        modalImg.src = imgSrc;
         document.getElementById('info-text').innerText = descriptions[statName];
-        modal.style.display = 'block';
+        const imgSrc = "images/" + (avatarMap[statName] || "strength.png");
+        document.getElementById('stat-display-img').src = imgSrc;
+        document.getElementById('modal-stat-img').src = imgSrc;
+        document.getElementById('info-modal').style.display = 'block';
     }
-    
-    // ... остальной JS ...
-</script>
 
+    function renderStats() {
+        const container = document.getElementById('stats-container');
+        container.innerHTML = '';
+        for (let key in stats) {
+            let row = document.createElement('div');
+            row.className = 'stat-row';
+            row.innerHTML = `<span onclick="showInfo('${key}')" style="cursor:pointer; color:#00ff00;">${key}</span> 
+                             <div id="${key}-bars" style="display:flex;"></div>`;
+            container.appendChild(row);
+            const bars = document.getElementById(key + '-bars');
+            for (let i = 0; i < 10; i++) {
+                bars.innerHTML += `<div class="block ${i < stats[key] ? 'filled' : ''}"></div>`;
+            }
+        }
+    }
+
+    function switchTab(tabId, event) {
+        document.querySelectorAll('.tab-content').forEach(t => t.style.display = 'none');
+        document.getElementById('tab-' + tabId).style.display = 'block';
+    }
+
+    renderStats();
+</script>
 </body>
 </html>
