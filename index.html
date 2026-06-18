@@ -7,10 +7,11 @@
         body { background: #000; color: #00ff00; font-family: monospace; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
-        .stat-row { display: flex; align-items: center; margin: 15px 0; gap: 10px; }
+        .stat-row { display: flex; align-items: center; margin: 10px 0; gap: 10px; }
         .block { width: 12px; height: 12px; border: 1px solid #00ff00; }
         .block.filled { background: #00ff00; }
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; display: flex; justify-content: space-around; background: #001100; }
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; display: flex; justify-content: space-around; background: #001100; padding: 10px 0; border-top: 1px solid #00ff00; }
+        button { background: #001100; color: #00ff00; border: 1px solid #00ff00; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -18,16 +19,21 @@
 <div id="app">
     <div id="tab-stat" class="tab-content active">
         <h2>STAT: S.P.E.C.I.A.L.</h2>
-        <div id="points-display">ДОСТУПНЫХ ОЧКОВ: <span id="free-points">3</span></div>
-        
+        <div>ДОСТУПНЫХ ОЧКОВ: <span id="free-points">3</span></div>
         <div id="vault-boy-container" style="text-align: center; margin: 20px;">
             <img id="stat-display-img" src="images/strength.png" style="width: 200px; border: 1px solid #00ff00;">
         </div>
-        
         <div id="stats-container"></div>
     </div>
 
-    <div id="info-modal" style="display:none; position:fixed; top:10%; left:5%; width:90%; padding:20px; background:#000; border:2px solid #00ff00; z-index:999; text-align:center;">
+    <div id="tab-data" class="tab-content"><h2>DATA: QUESTS</h2></div>
+    <div id="tab-inv" class="tab-content"><h2>INV: GEAR</h2></div>
+    <div id="tab-perks" class="tab-content"><h2>PERKS</h2></div>
+    <div id="tab-arcade" class="tab-content"><h2>ARCADE</h2></div>
+    <div id="tab-shop" class="tab-content"><h2>SHOP</h2></div>
+    <div id="tab-log" class="tab-content"><h2>LOG</h2></div>
+
+    <div id="info-modal" style="display:none; position:fixed; top:20%; left:10%; width:80%; padding:20px; background:#000; border:2px solid #00ff00; z-index:999; text-align:center;">
         <p id="info-text"></p>
         <img id="modal-stat-img" src="" style="width: 150px; border: 1px solid #00ff00;">
         <br><button onclick="document.getElementById('info-modal').style.display='none'">ЗАКРЫТЬ</button>
@@ -36,12 +42,20 @@
     <nav class="bottom-nav">
         <button onclick="switchTab('stat', event)">STAT</button>
         <button onclick="switchTab('data', event)">DATA</button>
+        <button onclick="switchTab('inv', event)">INV</button>
+        <button onclick="switchTab('perks', event)">PERKS</button>
+        <button onclick="switchTab('arcade', event)">ARC</button>
+        <button onclick="switchTab('shop', event)">SHP</button>
+        <button onclick="switchTab('log', event)">LOG</button>
     </nav>
 </div>
 
 <script>
-    const stats = { "STRENGTH": 3, "PERCEPTION": 3, "ENDURANCE": 3, "CHARISMA": 3, "INTELLIGENCE": 3, "AGILITY": 3, "LUCK": 3 };
-    let freePoints = 3;
+    // ДАННЫЕ
+    let stats = JSON.parse(localStorage.getItem('myStats')) || { 
+        "STRENGTH": 3, "PERCEPTION": 3, "ENDURANCE": 3, "CHARISMA": 3, "INTELLIGENCE": 3, "AGILITY": 3, "LUCK": 3 
+    };
+    let freePoints = parseInt(localStorage.getItem('myPoints')) || 3;
 
     const descriptions = {
         "STRENGTH": "Сила — чтобы таскать тонны хлама.",
@@ -58,6 +72,7 @@
         "CHARISMA": "charisma.png", "INTELLIGENCE": "intelligence.png", "LUCK": "luck.png", "AGILITY": "agility.png"
     };
 
+    // ФУНКЦИИ
     function showInfo(statName) {
         document.getElementById('info-text').innerText = descriptions[statName];
         const imgSrc = "images/" + (avatarMap[statName] || "strength.png");
@@ -68,12 +83,14 @@
 
     function renderStats() {
         const container = document.getElementById('stats-container');
+        document.getElementById('free-points').innerText = freePoints;
         container.innerHTML = '';
         for (let key in stats) {
             let row = document.createElement('div');
             row.className = 'stat-row';
-            row.innerHTML = `<span onclick="showInfo('${key}')" style="cursor:pointer; color:#00ff00;">${key}</span> 
-                             <div id="${key}-bars" style="display:flex;"></div>`;
+            row.innerHTML = `<span onclick="showInfo('${key}')" style="cursor:pointer; text-decoration:underline;">${key}</span> 
+                             <div id="${key}-bars" style="display:flex;"></div>
+                             ${freePoints > 0 ? `<button onclick="addPoint('${key}')">+</button>` : ''}`;
             container.appendChild(row);
             const bars = document.getElementById(key + '-bars');
             for (let i = 0; i < 10; i++) {
@@ -82,9 +99,18 @@
         }
     }
 
+    function addPoint(stat) {
+        if (freePoints > 0 && stats[stat] < 10) {
+            stats[stat]++; freePoints--;
+            localStorage.setItem('myStats', JSON.stringify(stats));
+            localStorage.setItem('myPoints', freePoints);
+            renderStats();
+        }
+    }
+
     function switchTab(tabId, event) {
-        document.querySelectorAll('.tab-content').forEach(t => t.style.display = 'none');
-        document.getElementById('tab-' + tabId).style.display = 'block';
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+        document.getElementById('tab-' + tabId).classList.add('active');
     }
 
     renderStats();
